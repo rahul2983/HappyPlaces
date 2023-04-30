@@ -5,26 +5,22 @@ import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
-import androidx.appcompat.widget.Toolbar
+import com.example.happyplaces.databinding.ActivityAddHappyPlaceBinding
 import java.util.*
 
 class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
-
+    private var binding: ActivityAddHappyPlaceBinding? = null
     private var cal = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_happy_place)
+        binding = ActivityAddHappyPlaceBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
 
-        val etDate: EditText = findViewById(R.id.et_date)
-
-        val toolbarAddPlace: Toolbar = findViewById(R.id.toolbar_add_place)
-        setSupportActionBar(toolbarAddPlace)
+        setSupportActionBar(binding?.toolbarAddPlace)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbarAddPlace.setNavigationOnClickListener() {
+        binding?.toolbarAddPlace?.setNavigationOnClickListener() {
             onBackPressed()
         }
 
@@ -35,8 +31,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             cal.set(Calendar.DAY_OF_MONTH, i3)
             updateDateInView()
         }
-//        val etDate: EditText = findViewById(R.id.et_date)
-        etDate.setOnClickListener(this)
+        binding?.etDate?.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -56,7 +51,11 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
     private fun updateDateInView(){
         val myFormat = "MM.dd.yyyy"
         val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
-        val etDate: EditText = findViewById(R.id.et_date)
-        etDate.setText(sdf.format(cal.time).toString())
+        binding?.etDate?.setText(sdf.format(cal.time).toString())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 }
